@@ -1,0 +1,45 @@
+services:
+  mysql-db:
+    image: mysql:8.1
+    container_name: mysql-db
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    env_file:
+      - .env
+#    volumes:
+#      - ./mysql-db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - chat-network
+  chat-service:
+    restart: always
+    container_name: chat-service
+    ports:
+      - "${SERVICE_PORT}:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PROFILE_ACTIVE: test
+      ROOT_LOG_LEVEL: error
+      WEB_LOG_LEVEL: debug
+      DB_HOST: mysql-db:3306
+    networks:
+      - chat-network
+    volumes:
+      - ./logs:/sc-chat/logs
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+        restart: true
+networks:
+  chat-network:

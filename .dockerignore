@@ -1,0 +1,8 @@
+Dockerfile
+.gitignore
+.idea
+mysql-db
+docker-compose.yml
+HELP.md
+target
+.env
