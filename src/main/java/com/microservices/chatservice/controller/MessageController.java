@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/${API_VERSION}/chat")
+@RequestMapping(path = "/api/${API_VERSION}/chat/message")
 @Tag(
         name = "Message Controller",
         description = "All endpoints about messages of a conversation belongs an user."

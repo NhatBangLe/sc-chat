@@ -49,7 +49,7 @@ class MessageControllerTests extends ChatServiceApplicationTests {
         given(requestSpecification)
                 .pathParam("conversationId", 3453543L)
                 .when()
-                .get("/{conversationId}")
+                .get("/message/{conversationId}")
                 .then()
                 .statusCode(200);
     }
@@ -59,7 +59,7 @@ class MessageControllerTests extends ChatServiceApplicationTests {
         given(requestSpecification)
                 .pathParam("conversationId", conversationId)
                 .when()
-                .get("/{conversationId}")
+                .get("/message/{conversationId}")
                 .then()
                 .statusCode(200);
     }
@@ -69,7 +69,7 @@ class MessageControllerTests extends ChatServiceApplicationTests {
         given(requestSpecification)
                 .pathParam("messageId", 34563456L)
                 .when()
-                .delete("/{messageId}")
+                .delete("/message/{messageId}")
                 .then()
                 .statusCode(204);
     }
@@ -93,7 +93,7 @@ class MessageControllerTests extends ChatServiceApplicationTests {
         given(requestSpecification)
                 .pathParam("messageId", messageId)
                 .when()
-                .delete("/{messageId}")
+                .delete("/message/{messageId}")
                 .then()
                 .statusCode(204);
     }
