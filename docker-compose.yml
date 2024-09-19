@@ -1,27 +1,27 @@
 services:
-  mysql-db:
+  mysql:
     image: mysql:8.1
-    container_name: mysql-db
+    container_name: chat-db
     ports:
       - "${DB_PORT}:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
     env_file:
       - .env
-#    volumes:
-#      - ./mysql-db:/var/lib/mysql
+    volumes:
+      - db-data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      interval: 30s
-      timeout: 30s
+      interval: 10s
+      timeout: 10s
       retries: 3
     networks:
-      - chat-network
+      - network
   chat-service:
-    restart: always
+#    restart: always
     container_name: chat-service
     ports:
       - "${SERVICE_PORT}:8080"
@@ -32,14 +32,20 @@ services:
       PROFILE_ACTIVE: test
       ROOT_LOG_LEVEL: error
       WEB_LOG_LEVEL: debug
-      DB_HOST: mysql-db:3306
+      DB_HOST: mysql:3306
     networks:
-      - chat-network
+      - network
     volumes:
-      - ./logs:/sc-chat/logs
+      - logs:/sc-chat/logs
     depends_on:
-      mysql-db:
+      mysql:
         condition: service_healthy
         restart: true
+volumes:
+  db-data:
+    name: chat-db
+  logs:
+    name: chat-logs
 networks:
-  chat-network:
+  network:
+    name: chat-network

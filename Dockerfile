@@ -1,11 +1,16 @@
 FROM eclipse-temurin:21-jdk-jammy AS build
-COPY . /sc-chat
-WORKDIR /sc-chat
+COPY . /app
+WORKDIR /app
 RUN ./mvnw clean install -Dmaven.test.skip=true
 
 FROM eclipse-temurin:21-jre-jammy
 RUN addgroup --system spring && adduser --system spring && adduser spring spring
-USER spring:spring
-COPY --from=build /sc-chat/target/chat-service.jar /sc-chat/app.jar
+
+COPY --from=build /app/target/chat-service.jar /sc-chat/app.jar
 WORKDIR /sc-chat
+
+RUN mkdir logs
+RUN chown spring:spring logs
+
+USER spring:spring
 ENTRYPOINT ["java", "-jar", "app.jar"]
