@@ -2,13 +2,11 @@ package com.microservices.chatservice.websocket;
 
 import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.request.ClientMessage;
+import com.microservices.chatservice.exception.WebSocketException;
 import com.microservices.chatservice.websocket.service.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.*;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -33,6 +31,11 @@ public class WebSocketController {
     @MessageMapping("/user/{userId}/disconnected")
     public void handleUserHasDisconnected(@DestinationVariable String userId) {
         webSocketService.handleUserHasDisconnected(userId);
+    }
+
+    @MessageExceptionHandler(WebSocketException.class)
+    public void handleMessageException(WebSocketException e) {
+        log.error("", e);
     }
 
 }

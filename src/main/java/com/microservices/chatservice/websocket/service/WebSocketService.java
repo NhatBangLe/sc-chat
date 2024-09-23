@@ -5,6 +5,8 @@ import com.microservices.chatservice.constant.UserStatus;
 import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.response.NotificationResponse;
 import com.microservices.chatservice.entity.*;
+import com.microservices.chatservice.exception.WebSocketException;
+import com.microservices.chatservice.repository.ParticipantRepository;
 import com.microservices.chatservice.repository.UserRepository;
 import com.microservices.chatservice.dto.request.ClientMessage;
 import com.microservices.chatservice.exception.NoEntityFoundException;
@@ -24,6 +26,7 @@ public class WebSocketService {
 
     private final UserRepository userRepository;
     private final ConversationRepository conversationRepository;
+    private final ParticipantRepository participantRepository;
     private final MessageRepository messageRepository;
 
     public MessageResponse handleIncomingMessage(Long conversationId, ClientMessage clientMessage)
@@ -31,9 +34,12 @@ public class WebSocketService {
         var senderId = clientMessage.senderId();
         var text = clientMessage.text();
         var clientAttachments = clientMessage.attachments();
+        if (!participantRepository.existsByConversation_IdAndUser_Id(conversationId, senderId))
+            throw new WebSocketException("Participant not found.");
 
         var conversation = findConversation(conversationId);
         var sender = findUser(senderId);
+
         var newMessageBuilder = Message.builder()
                 .type(MessageType.TEXT)
                 .text(text)

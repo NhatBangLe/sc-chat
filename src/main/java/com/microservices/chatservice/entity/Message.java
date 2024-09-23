@@ -3,11 +3,8 @@ package com.microservices.chatservice.entity;
 import com.microservices.chatservice.constant.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Setter
@@ -18,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class Message extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,14 +25,6 @@ public class Message {
 
     @Column
     private String text;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private Timestamp createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "message", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Attachment> attachments;

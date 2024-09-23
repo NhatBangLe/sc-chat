@@ -3,11 +3,7 @@ package com.microservices.chatservice.entity;
 import com.microservices.chatservice.constant.ParticipantType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -17,21 +13,13 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Participant {
+public class Participant extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private ParticipantType type;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private Timestamp createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Timestamp updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "conversation_id", nullable = false, updatable = false, referencedColumnName = "id")

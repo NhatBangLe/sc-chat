@@ -3,11 +3,8 @@ package com.microservices.chatservice.entity;
 import com.microservices.chatservice.constant.ConversationType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -18,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Conversation {
+public class Conversation extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,14 +25,6 @@ public class Conversation {
 
     @Column(nullable = false)
     private ConversationType type;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private Timestamp createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Timestamp updatedAt;
 
     @Column(nullable = false)
     private Long messageCount;

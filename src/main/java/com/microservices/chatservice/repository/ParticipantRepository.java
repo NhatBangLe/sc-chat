@@ -11,5 +11,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     List<Participant> findAllByConversation_Id(Long id, Pageable pageable);
     Optional<Participant> findByConversation_IdAndUser_Id(Long conversationId, String userId);
+    boolean existsByConversation_IdAndUser_Id(Long conversationId, String userId);
 
 }
