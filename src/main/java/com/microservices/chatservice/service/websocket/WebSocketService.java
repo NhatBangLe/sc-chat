@@ -1,14 +1,15 @@
-package com.microservices.chatservice.websocket.service;
+package com.microservices.chatservice.service.websocket;
 
 import com.microservices.chatservice.constant.MessageType;
 import com.microservices.chatservice.constant.UserStatus;
+import com.microservices.chatservice.dto.response.ChatServerConfigurationProperty;
 import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.response.NotificationResponse;
 import com.microservices.chatservice.entity.*;
 import com.microservices.chatservice.exception.WebSocketException;
 import com.microservices.chatservice.repository.ParticipantRepository;
 import com.microservices.chatservice.repository.UserRepository;
-import com.microservices.chatservice.dto.request.ClientMessage;
+import com.microservices.chatservice.dto.request.ChatSendingMessage;
 import com.microservices.chatservice.exception.NoEntityFoundException;
 import com.microservices.chatservice.repository.ConversationRepository;
 import com.microservices.chatservice.repository.MessageRepository;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebSocketService {
 
+    private final ChatServerConfigurationProperty property;
     private final SimpMessagingTemplate template;
 
     private final UserRepository userRepository;
@@ -29,11 +31,11 @@ public class WebSocketService {
     private final ParticipantRepository participantRepository;
     private final MessageRepository messageRepository;
 
-    public MessageResponse handleIncomingMessage(Long conversationId, ClientMessage clientMessage)
+    public MessageResponse transferMessage(Long conversationId, ChatSendingMessage chatSendingMessage)
             throws NoEntityFoundException {
-        var senderId = clientMessage.senderId();
-        var text = clientMessage.text();
-        var clientAttachments = clientMessage.attachments();
+        var senderId = chatSendingMessage.senderId();
+        var text = chatSendingMessage.text();
+        var attachmentIds = chatSendingMessage.attachmentIds();
         if (!participantRepository.existsByConversation_IdAndUser_Id(conversationId, senderId))
             throw new WebSocketException("Participant not found.");
 
@@ -46,12 +48,9 @@ public class WebSocketService {
                 .sender(sender)
                 .conversation(conversation);
 
-        if (clientAttachments != null && !clientAttachments.isEmpty()) {
-            var attachments = clientAttachments.stream()
-                    .map(clientAttachment -> Attachment.builder()
-                            .id(clientAttachment.id())
-                            .fileUrl(clientAttachment.fileUrl())
-                            .build())
+        if (attachmentIds != null && !attachmentIds.isEmpty()) {
+            var attachments = attachmentIds.stream()
+                    .map(attachmentId -> Attachment.builder().id(attachmentId).build())
                     .toList();
             newMessageBuilder.attachments(attachments);
             newMessageBuilder.type(text != null ? MessageType.BOTH : MessageType.FILE);
@@ -80,12 +79,14 @@ public class WebSocketService {
     }
 
     /**
-     * Send a notification message to "/topic/user/${userId}" destination with a payload.
+     * Send a notification message to "/topic/notification/${userId}" destination with a payload.
      * @param userId Recipient ID
      * @param data A payload is transfer with the message.
      */
     public void notifyToUser(String userId, NotificationResponse data) {
-        template.convertAndSend("/topic/user/" + userId, data);
+        var notificationDest = property.getSubscribeNotificationDest()
+                .replace("{userId}", userId);
+        template.convertAndSend(notificationDest, data);
     }
 
     public void notifyToUser(List<String> userIds, NotificationResponse data) {

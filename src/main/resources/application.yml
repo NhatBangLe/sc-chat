@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: chat-service
+  profiles:
+    active: ${PROFILE_ACTIVE:dev}
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost:3306}/${DB_NAME:chat_service}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+springdoc:
+  override-with-generic-response: false
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /api-docs
+
+eureka:
+  instance:
+    appname: ${EUREKA_APP_NAME:unknown}
+    ip-address: ${EUREKA_IP_ADDR:127.0.0.1}
+    non-secure-port: ${EUREKA_PORT:8080}
+    metadataMap:
+      zone: ${REGISTER_ZONE:}
+    prefer-ip-address: true
+    statusPageUrl: http://${eureka.instance.ip-address}:${eureka.instance.non-secure-port}/info
+    healthCheckUrl: http://${eureka.instance.ip-address}:${eureka.instance.non-secure-port}/health
+    homePageUrl: http://${eureka.instance.ip-address}:${eureka.instance.non-secure-port}/
+  client:
+    service-url:
+      defaultZone: ${DEFAULT_ZONE:http://admin:admin@localhost:8080/eureka/}
+    preferSameZoneEureka: true
+
+chat:
+  server-host: ${EXTERNAL_HOST:localhost}
+  server-port: ${EXTERNAL_PORT:8080}
+
+API_VERSION: v1
+API_DOCS_SERVER: ${SWAGGER_SERVER_URL:http://localhost:8080}

@@ -1,4 +1,4 @@
-package com.microservices.chatservice.websocket.config;
+package com.microservices.chatservice.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +13,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/sc")
-                .setUserDestinationPrefix("/user")
                 .enableSimpleBroker("/topic");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat");
+        registry.addEndpoint("/chat")
+                .setAllowedOrigins("*");
     }
 
 }

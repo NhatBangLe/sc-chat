@@ -9,7 +9,6 @@ public abstract class AbstractAttachmentService implements IAttachmentService {
         return new AttachmentResponse(
                 attachment.getId(),
                 attachment.getMessage().getId(),
-                attachment.getFileUrl(),
                 attachment.getCreatedAt().getTime()
         );
     }

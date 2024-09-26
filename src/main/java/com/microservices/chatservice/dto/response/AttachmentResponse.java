@@ -8,7 +8,6 @@ import java.io.Serializable;
 public record AttachmentResponse(
         String id,
         Long messageId,
-        String fileUrl,
         Long createdAt
 ) implements Serializable {
 }

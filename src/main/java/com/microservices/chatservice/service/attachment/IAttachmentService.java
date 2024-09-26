@@ -11,13 +11,13 @@ import java.util.List;
 public interface IAttachmentService {
 
     List<AttachmentResponse> getAllAttachments(
-            @NotNull(message = "Conversation ID cannot be null when getting all attachments.")
+            @NotNull(message = "Conversation ID cannot be null when getting all attachmentIds.")
             Long conversationId,
-            @Min(value = 0, message = "Invalid page number (must positive) when getting all attachments.")
-            @NotNull(message = "Page number cannot be null when getting all attachments.")
+            @Min(value = 0, message = "Invalid page number (must positive) when getting all attachmentIds.")
+            @NotNull(message = "Page number cannot be null when getting all attachmentIds.")
             Integer pageNumber,
-            @Min(value = 1, message = "Invalid page size (must greater than 0) when getting all attachments.")
-            @NotNull(message = "Page size cannot be null when getting all attachments.")
+            @Min(value = 1, message = "Invalid page size (must greater than 0) when getting all attachmentIds.")
+            @NotNull(message = "Page size cannot be null when getting all attachmentIds.")
             Integer pageSize
     );
 

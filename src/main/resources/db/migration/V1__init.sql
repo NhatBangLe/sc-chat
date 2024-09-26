@@ -1,7 +1,6 @@
 CREATE TABLE chat_service.attachment
 (
     id              VARCHAR(36) NOT NULL,
-    file_url        VARCHAR(80) NULL,
     created_at      datetime    NOT NULL,
     updated_at      datetime    NOT NULL,
     message_id      BIGINT      NOT NULL,

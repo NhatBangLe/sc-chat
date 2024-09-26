@@ -17,9 +17,6 @@ public class Attachment extends AuditingEntity {
     @Column(length = 36)
     private String id;
 
-    @Column(length = 80)
-    private String fileUrl;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "message_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Message message;

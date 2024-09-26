@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping(path = "/api/${API_VERSION}/chat/attachment")
 @Tag(
         name = "Attachment Controller",
-        description = "All endpoints about attachments belongs a conversation of an user."
+        description = "All endpoints about attachmentIds belongs a conversation of an user."
 )
 @RequiredArgsConstructor
 public class AttachmentController {
@@ -26,7 +26,7 @@ public class AttachmentController {
 
     @GetMapping(path = "/{conversationId}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(description = "Get all attachments of a conversation.")
+    @Operation(description = "Get all attachmentIds of a conversation.")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "400",

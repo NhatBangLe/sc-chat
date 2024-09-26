@@ -1,0 +1,19 @@
+spring:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    username: admin
+    password: admin
+  cloud:
+    discovery:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
+
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.format_sql=true

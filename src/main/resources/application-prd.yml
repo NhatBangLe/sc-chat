@@ -1,0 +1,11 @@
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    root: ${ROOT_LOG_LEVEL}
+    web: ${WEB_LOG_LEVEL}
+    name: ./logs/chat-service.log

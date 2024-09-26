@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: chat-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+  flyway:
+    enabled: false
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
+
+API_VERSION: v1
