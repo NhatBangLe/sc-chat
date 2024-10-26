@@ -8,4 +8,5 @@ logging:
   level:
     root: ${ROOT_LOG_LEVEL:info}
     web: ${WEB_LOG_LEVEL:info}
-    name: ./logs/chat-service.log
+  file:
+    name: logs/chat-service.log
