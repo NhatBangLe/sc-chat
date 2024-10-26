@@ -4,9 +4,9 @@ spring:
   profiles:
     active: ${PROFILE_ACTIVE:dev}
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost:3306}/${DB_NAME:chat_service}
-    username: ${DB_USER:root}
-    password: ${DB_PASSWORD:root}
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: none
