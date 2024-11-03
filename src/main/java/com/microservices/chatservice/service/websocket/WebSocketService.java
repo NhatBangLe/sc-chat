@@ -2,7 +2,7 @@ package com.microservices.chatservice.service.websocket;
 
 import com.microservices.chatservice.constant.MessageType;
 import com.microservices.chatservice.constant.UserStatus;
-import com.microservices.chatservice.dto.response.ChatServerConfigurationProperty;
+import com.microservices.chatservice.config.ChatServerConfigurationProperty;
 import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.response.NotificationResponse;
 import com.microservices.chatservice.entity.*;

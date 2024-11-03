@@ -1,6 +1,6 @@
 package com.microservices.chatservice.controller;
 
-import com.microservices.chatservice.dto.response.ChatServerConfigurationProperty;
+import com.microservices.chatservice.config.ChatServerConfigurationProperty;
 import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.request.ChatSendingMessage;
 import com.microservices.chatservice.exception.WebSocketException;

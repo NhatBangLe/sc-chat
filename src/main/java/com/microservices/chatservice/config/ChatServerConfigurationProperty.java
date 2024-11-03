@@ -1,4 +1,4 @@
-package com.microservices.chatservice.dto.response;
+package com.microservices.chatservice.config;
 
 import lombok.Getter;
 import lombok.Setter;
