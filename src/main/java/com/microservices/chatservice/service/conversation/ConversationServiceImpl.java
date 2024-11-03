@@ -27,7 +27,7 @@ public class ConversationServiceImpl extends AbstractConversationService {
     @Override
     public List<ConversationResponse> getAllConversations(String userId, Integer pageNumber, Integer pageSize) {
         var pageable = PageRequest.of(pageNumber, pageSize, Sort.by("updatedAt").descending());
-        return conversationRepository.findAllByCreator_IdOrParticipants_User_Id(userId, userId, pageable)
+        return conversationRepository.findAllConversationsByUserId(userId, pageable)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
