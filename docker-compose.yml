@@ -3,9 +3,9 @@ services:
     image: mysql:8.1
     container_name: chat-db
     ports:
-      - "${DB_PORT}:3306"
+      - "2706:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
@@ -15,28 +15,37 @@ services:
       - db-data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-      interval: 10s
-      timeout: 10s
+      interval: 15s
+      timeout: 15s
       retries: 3
     networks:
       - network
   chat-service:
-#    restart: always
+    restart: always
     container_name: chat-service
+    hostname: chat-service-1
     ports:
-      - "${SERVICE_PORT}:8080"
+      - "80:8080"
     build:
       context: .
       dockerfile: Dockerfile
     environment:
+      DB_HOST: mysql:3306
       PROFILE_ACTIVE: test
       ROOT_LOG_LEVEL: error
-      WEB_LOG_LEVEL: debug
-      DB_HOST: mysql:3306
+      WEB_LOG_LEVEL: error
+      EUREKA_APP_NAME: chat-service
+      EUREKA_IP_ADDR: 127.0.0.1
+      EUREKA_PORT: 80
+      REGISTER_ZONE: service-registry-1
+      DEFAULT_ZONE: http://admin:admin@service-registry:80/eureka/
+      SWAGGER_SERVER_URL: http://gateway:80
+      EXTERNAL_HOST: 127.0.0.1
+      EXTERNAL_PORT: 80
     networks:
       - network
     volumes:
-      - logs:/sc-chat/logs
+      - logs:/app/logs
     depends_on:
       mysql:
         condition: service_healthy
