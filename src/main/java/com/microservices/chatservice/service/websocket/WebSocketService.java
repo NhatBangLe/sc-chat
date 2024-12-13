@@ -42,20 +42,25 @@ public class WebSocketService {
         var conversation = findConversation(conversationId);
         var sender = findUser(senderId);
 
-        var newMessageBuilder = Message.builder()
+        var newMessage = Message.builder()
                 .type(MessageType.TEXT)
                 .text(text)
                 .sender(sender)
-                .conversation(conversation);
+                .conversation(conversation)
+                .build();
 
         if (attachmentIds != null && !attachmentIds.isEmpty()) {
             var attachments = attachmentIds.stream()
-                    .map(attachmentId -> Attachment.builder().id(attachmentId).build())
+                    .map(attachmentId -> Attachment.builder()
+                            .id(attachmentId)
+                            .conversation(conversation)
+                            .message(newMessage)
+                            .build())
                     .toList();
-            newMessageBuilder.attachments(attachments);
-            newMessageBuilder.type(text != null ? MessageType.BOTH : MessageType.FILE);
+            newMessage.setAttachments(attachments);
+            newMessage.setType(text != null ? MessageType.BOTH : MessageType.FILE);
         }
-        var newMessage = messageRepository.save(newMessageBuilder.build());
+        messageRepository.save(newMessage);
 
         // Notify to all participants of the conversation
         var userIds = conversation.getParticipants().stream()
@@ -72,6 +77,7 @@ public class WebSocketService {
                 newMessage.getId(),
                 newMessage.getType(),
                 text,
+                attachmentIds,
                 newMessage.getCreatedAt().getTime(),
                 senderId,
                 conversationId

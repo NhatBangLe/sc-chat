@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class User extends AuditingEntity {
     @Id
-    @Column
+    @Column(length = 36)
     private String id;
 
     @Column(nullable = false)

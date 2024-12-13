@@ -46,7 +46,7 @@ CREATE TABLE chat_service.participant
 
 CREATE TABLE chat_service.user
 (
-    id         VARCHAR(255) NOT NULL,
+    id         VARCHAR(36) NOT NULL,
     status     SMALLINT     NOT NULL,
     created_at datetime     NOT NULL,
     updated_at datetime     NOT NULL,
