@@ -17,24 +17,20 @@ public class APIDocsConfig {
 
     @Bean
     public OpenAPI getOpenAPI() {
-        var info = new Info()
-                .title("Chat Service")
-                .version("1.0.0")
-                .description(
-                        """
-                                NOTE: ALL DATE-TIME VALUES ARE LONG DATATYPE (INTEGER 64-BIT).
-                                
-                                This service includes:\
+        return new OpenAPI().info(new Info()
+                        .title("Chat Service")
+                        .version("1.0.0")
+                        .description(
+                                """
+                                        NOTE: ALL DATE-TIME VALUES ARE LONG DATATYPE (INTEGER 64-BIT).
+                                        
+                                        This service includes:\
 
-                                1. WebSocket - STOMP provides real-time chatting ability (not showing here).\
+                                        1. WebSocket - STOMP provides real-time chatting ability (not showing here).\
 
-                                2. All HTTP endpoints support to query data."""
-                );
-        var openApi = new OpenAPI();
-        openApi.setInfo(info);
-        openApi.setServers(List.of(new Server().url(serverUrl)));
-
-        return openApi;
+                                        2. All HTTP endpoints support to query data."""
+                        ))
+                .servers(List.of(new Server().url(serverUrl)));
     }
 
 }
