@@ -2,6 +2,7 @@ package com.microservices.chatservice.service.participant;
 
 import com.microservices.chatservice.dto.request.ParticipantCreateRequest;
 import com.microservices.chatservice.dto.request.ParticipantUpdateRequest;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.dto.response.ParticipantResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -9,12 +10,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-
 @Validated
 public interface IParticipantService {
 
-    List<ParticipantResponse> getAllParticipants(
+    PagingObjectsResponse<ParticipantResponse> getAllParticipants(
             @NotNull(message = "Conversation ID cannot be null when getting all participants.")
             Long conversationId,
             @Min(value = 0, message = "Invalid page number (must positive) when getting all participants.")

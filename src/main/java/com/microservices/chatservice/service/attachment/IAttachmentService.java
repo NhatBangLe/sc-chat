@@ -1,16 +1,15 @@
 package com.microservices.chatservice.service.attachment;
 
 import com.microservices.chatservice.dto.response.AttachmentResponse;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-
 @Validated
 public interface IAttachmentService {
 
-    List<AttachmentResponse> getAllAttachments(
+    PagingObjectsResponse<AttachmentResponse> getAllAttachments(
             @NotNull(message = "Conversation ID cannot be null when getting all attachmentIds.")
             Long conversationId,
             @Min(value = 0, message = "Invalid page number (must positive) when getting all attachmentIds.")

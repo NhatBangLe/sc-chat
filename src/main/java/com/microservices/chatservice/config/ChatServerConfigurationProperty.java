@@ -24,7 +24,12 @@ public final class ChatServerConfigurationProperty {
     /**
      * Specify a destination for publishing a new chat message.
      */
-    private final String publishDest = "/sc/conversation/{conversationId}";
+    private final String publishUserConnectionDest = "/sc/user/{userId}";
+
+    /**
+     * Specify a destination for publishing a new chat message.
+     */
+    private final String publishConversationDest = "/sc/conversation/{conversationId}";
 
     /**
      * Specify a destination for subscribing to the chat message broker.

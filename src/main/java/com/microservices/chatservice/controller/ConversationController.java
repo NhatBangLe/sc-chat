@@ -3,6 +3,7 @@ package com.microservices.chatservice.controller;
 import com.microservices.chatservice.dto.request.ConversationCreateRequest;
 import com.microservices.chatservice.dto.request.ConversationUpdateRequest;
 import com.microservices.chatservice.dto.response.ConversationResponse;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.service.conversation.IConversationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,8 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/${API_VERSION}/chat/conversation")
@@ -28,14 +27,14 @@ public class ConversationController {
 
     @GetMapping(path = "/{userId}/user")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(description = "Get all conversations by user having the creatorId. " +
+    @Operation(description = "Get all conversations by user having the userId. " +
                              "The result will be sorted by updatedAt descending.")
     @ApiResponse(
             responseCode = "400",
             description = "Invalid page number or page size.",
             content = @Content
     )
-    public List<ConversationResponse> getAllConversations(
+    public PagingObjectsResponse<ConversationResponse> getAllConversations(
             @PathVariable String userId,
             @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "6") Integer pageSize

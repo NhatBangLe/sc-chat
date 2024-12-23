@@ -1,6 +1,7 @@
 package com.microservices.chatservice.controller;
 
 import com.microservices.chatservice.dto.response.MessageResponse;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.service.message.IMessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,8 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/${API_VERSION}/chat/message")
@@ -39,7 +38,7 @@ public class MessageController {
                     content = @Content
             )
     })
-    public List<MessageResponse> getAllMessages(
+    public PagingObjectsResponse<MessageResponse> getAllMessages(
             @PathVariable Long conversationId,
             @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "6") Integer pageSize

@@ -86,8 +86,9 @@ public class WebSocketService {
 
     /**
      * Send a notification message to "/topic/notification/${userId}" destination with a payload.
+     *
      * @param userId Recipient ID
-     * @param data A payload is transfer with the message.
+     * @param data   A payload is transfer with the message.
      */
     public void notifyToUser(String userId, NotificationResponse data) {
         var notificationDest = property.getSubscribeNotificationDest()
@@ -99,19 +100,17 @@ public class WebSocketService {
         userIds.forEach(userId -> notifyToUser(userId, data));
     }
 
-    public void handleUserHasConnected(String userId) {
-        var user = userRepository.findById(userId)
-                .orElse(User.builder()
-                        .id(userId)
-                        .build()
-                );
-        user.setStatus(UserStatus.ONLINE);
-        userRepository.save(user);
-    }
-
-    public void handleUserHasDisconnected(String userId) {
-        var user = findUser(userId);
-        user.setStatus(UserStatus.OFFLINE);
+    public void handleUserConnection(String userId, Boolean isConnected) {
+        User user;
+        if (isConnected) {
+            user = userRepository.findById(userId)
+                    .orElse(User.builder().id(userId).build());
+            user.setStatus(UserStatus.ONLINE);
+        }
+        else {
+            user = findUser(userId);
+            user.setStatus(UserStatus.OFFLINE);
+        }
         userRepository.save(user);
     }
 

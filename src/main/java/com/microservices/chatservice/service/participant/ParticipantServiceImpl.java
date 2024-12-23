@@ -3,6 +3,7 @@ package com.microservices.chatservice.service.participant;
 import com.microservices.chatservice.constant.UserStatus;
 import com.microservices.chatservice.dto.request.ParticipantCreateRequest;
 import com.microservices.chatservice.dto.request.ParticipantUpdateRequest;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.dto.response.ParticipantResponse;
 import com.microservices.chatservice.entity.Conversation;
 import com.microservices.chatservice.entity.Participant;
@@ -13,9 +14,8 @@ import com.microservices.chatservice.repository.ParticipantRepository;
 import com.microservices.chatservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +26,19 @@ public class ParticipantServiceImpl extends AbstractParticipantService {
     private final ParticipantRepository participantRepository;
 
     @Override
-    public List<ParticipantResponse> getAllParticipants(Long conversationId, Integer pageNumber, Integer pageSize) {
-        var pageable = PageRequest.of(pageNumber, pageSize);
-        return participantRepository.findAllByConversation_Id(conversationId, pageable).stream()
-                .map(this::mapToResponse)
-                .toList();
+    public PagingObjectsResponse<ParticipantResponse> getAllParticipants(Long conversationId, Integer pageNumber, Integer pageSize) {
+        var pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
+        var participants = participantRepository.findAllByConversation_Id(conversationId, pageable);
+        return new PagingObjectsResponse<>(
+                participants.getTotalPages(),
+                participants.getTotalElements(),
+                participants.getNumber(),
+                participants.getSize(),
+                participants.getNumberOfElements(),
+                participants.isFirst(),
+                participants.isLast(),
+                participants.map(this::mapToResponse).toList()
+        );
     }
 
     @Override

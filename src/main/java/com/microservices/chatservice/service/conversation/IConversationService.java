@@ -3,6 +3,7 @@ package com.microservices.chatservice.service.conversation;
 import com.microservices.chatservice.dto.request.ConversationCreateRequest;
 import com.microservices.chatservice.dto.request.ConversationUpdateRequest;
 import com.microservices.chatservice.dto.response.ConversationResponse;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.exception.NoEntityFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -10,14 +11,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-
 @Validated
 public interface IConversationService {
 
-    List<ConversationResponse> getAllConversations(
+    PagingObjectsResponse<ConversationResponse> getAllConversations(
             @NotBlank(message = "User ID cannot be null/blank when getting all conversations.")
-            String creatorId,
+            String userId,
             @Min(value = 0, message = "Invalid page number (must positive) when getting all conversations.")
             @NotNull(message = "Page number cannot be null when getting all conversations.")
             Integer pageNumber,

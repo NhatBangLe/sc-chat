@@ -4,6 +4,7 @@ import com.microservices.chatservice.constant.UserStatus;
 import com.microservices.chatservice.dto.request.ConversationCreateRequest;
 import com.microservices.chatservice.dto.request.ConversationUpdateRequest;
 import com.microservices.chatservice.dto.response.ConversationResponse;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.entity.Conversation;
 import com.microservices.chatservice.entity.User;
 import com.microservices.chatservice.exception.IllegalAttributeException;
@@ -15,8 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class ConversationServiceImpl extends AbstractConversationService {
@@ -25,12 +24,19 @@ public class ConversationServiceImpl extends AbstractConversationService {
     private final ConversationRepository conversationRepository;
 
     @Override
-    public List<ConversationResponse> getAllConversations(String userId, Integer pageNumber, Integer pageSize) {
+    public PagingObjectsResponse<ConversationResponse> getAllConversations(String userId, Integer pageNumber, Integer pageSize) {
         var pageable = PageRequest.of(pageNumber, pageSize, Sort.by("updatedAt").descending());
-        return conversationRepository.findAllConversationsByUserId(userId, pageable)
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
+        var conversations = conversationRepository.findAllConversationsByUserId(userId, pageable);
+        return new PagingObjectsResponse<>(
+                conversations.getTotalPages(),
+                conversations.getTotalElements(),
+                conversations.getNumber(),
+                conversations.getSize(),
+                conversations.getNumberOfElements(),
+                conversations.isFirst(),
+                conversations.isLast(),
+                conversations.map(this::mapToResponse).toList()
+        );
     }
 
     @Override

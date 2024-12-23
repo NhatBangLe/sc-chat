@@ -2,6 +2,7 @@ package com.microservices.chatservice.controller;
 
 import com.microservices.chatservice.dto.request.ParticipantCreateRequest;
 import com.microservices.chatservice.dto.request.ParticipantUpdateRequest;
+import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.dto.response.ParticipantResponse;
 import com.microservices.chatservice.service.participant.IParticipantService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,8 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/${API_VERSION}/chat/participant")
@@ -34,7 +33,7 @@ public class ParticipantController {
             description = "Invalid page number or page size.",
             content = @Content
     )
-    public List<ParticipantResponse> getAllParticipants(
+    public PagingObjectsResponse<ParticipantResponse> getAllParticipants(
             @PathVariable Long conversationId,
             @RequestParam(required = false, defaultValue = "0") Integer pageNumber,
             @RequestParam(required = false, defaultValue = "6") Integer pageSize

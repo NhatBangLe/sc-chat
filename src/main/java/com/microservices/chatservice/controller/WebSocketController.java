@@ -42,6 +42,12 @@ public class WebSocketController {
         return webSocketService.transferMessage(conversationId, message);
     }
 
+    @MessageMapping("/user/{userId}")
+    public void handleUserConnection(@DestinationVariable String userId,
+                                @Payload boolean isConnected) {
+        webSocketService.handleUserConnection(userId, isConnected);
+    }
+
     @MessageExceptionHandler(WebSocketException.class)
     public void handleMessageException(WebSocketException e) {
         log.error("WebSocketController", e);
