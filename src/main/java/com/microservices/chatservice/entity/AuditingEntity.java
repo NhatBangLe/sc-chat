@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class AuditingEntity {
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private Timestamp createdAt;
 
     @LastModifiedDate

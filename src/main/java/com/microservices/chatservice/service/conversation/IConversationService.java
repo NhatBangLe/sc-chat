@@ -9,12 +9,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
 public interface IConversationService {
 
     PagingObjectsResponse<ConversationResponse> getAllConversations(
+            @Size(min = 36, max = 36, message = "userId length must be 36 characters.")
             @NotBlank(message = "User ID cannot be null/blank when getting all conversations.")
             String userId,
             @Min(value = 0, message = "Invalid page number (must positive) when getting all conversations.")
@@ -26,6 +28,7 @@ public interface IConversationService {
     );
 
     ConversationResponse getConversation(
+            @Min(value = 0, message = "conversationId cannot be negative.")
             @NotNull(message = "Conversation ID cannot be null/blank when getting a conversation.")
             Long conversationId
     ) throws NoEntityFoundException;
@@ -44,6 +47,7 @@ public interface IConversationService {
     );
 
     void updateConversation(
+            @Min(value = 0, message = "conversationId cannot be negative.")
             @NotNull(message = "Conversation ID cannot be null when updating a conversation.")
             Long conversationId,
             @NotNull(message = "Updating conversation data cannot be null.")
@@ -51,6 +55,7 @@ public interface IConversationService {
     );
 
     void deleteConversation(
+            @Min(value = 0, message = "conversationId cannot be negative.")
             @NotNull(message = "Conversation ID cannot be null when deleting a conversation.")
             Long conversationId
     );

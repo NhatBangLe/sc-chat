@@ -6,3 +6,4 @@ docker-compose.yml
 HELP.md
 target
 .env
+src/main/resources/application-dev.yml

@@ -59,8 +59,6 @@ public class ConversationServiceImpl extends AbstractConversationService {
         var conversation = Conversation.builder()
                 .title(conversationCreateRequest.title())
                 .type(conversationCreateRequest.type())
-                .messageCount(0L)
-                .participantCount(0)
                 .creator(creator)
                 .build();
         return conversationRepository.save(conversation).getId();
@@ -74,8 +72,8 @@ public class ConversationServiceImpl extends AbstractConversationService {
 
         var title = conversationUpdateRequest.title();
         if (title != null) {
-            if (title.isBlank())
-                throw new IllegalAttributeException("Conversation title cannot be blank when updating a conversation.");
+            if (title.isBlank() || title.length() > 100)
+                throw new IllegalAttributeException("Conversation title cannot be blank or longer than 100 characters.");
             conversation.setTitle(title);
             isUpdated = true;
         }
