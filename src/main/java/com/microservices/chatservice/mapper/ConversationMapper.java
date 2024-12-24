@@ -1,6 +1,7 @@
 package com.microservices.chatservice.mapper;
 
 import com.microservices.chatservice.dto.response.ConversationResponse;
+import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.entity.Conversation;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +12,10 @@ public class ConversationMapper implements EntityMapper<Conversation, Conversati
 
     @Override
     public ConversationResponse toResponse(Conversation entity) {
-        var message = messageMapper.toResponse(entity.getLastMessage());
+        var lastMessage = entity.getLastMessage();
+        MessageResponse message = null;
+        if (lastMessage != null)
+            message = messageMapper.toResponse(lastMessage);
 
         return new ConversationResponse(
                 entity.getId(),
