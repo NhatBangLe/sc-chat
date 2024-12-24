@@ -2,6 +2,7 @@ package com.microservices.chatservice.service.message;
 
 import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.response.PagingObjectsResponse;
+import com.microservices.chatservice.mapper.MessageMapper;
 import com.microservices.chatservice.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MessageServiceImpl extends AbstractMessageService {
+public class MessageServiceImpl implements IMessageService {
 
     private final MessageRepository messageRepository;
+
+    private final MessageMapper mapper;
 
     @Override
     public PagingObjectsResponse<MessageResponse> getAllMessages(Long conversationId, Integer pageNumber, Integer pageSize) {
@@ -26,7 +29,7 @@ public class MessageServiceImpl extends AbstractMessageService {
                 messages.getNumberOfElements(),
                 messages.isFirst(),
                 messages.isLast(),
-                messages.map(this::mapToResponse).toList()
+                messages.map(mapper::toResponse).toList()
         );
     }
 

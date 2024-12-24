@@ -9,6 +9,7 @@ import com.microservices.chatservice.entity.Conversation;
 import com.microservices.chatservice.entity.Participant;
 import com.microservices.chatservice.entity.User;
 import com.microservices.chatservice.exception.NoEntityFoundException;
+import com.microservices.chatservice.mapper.ParticipantMapper;
 import com.microservices.chatservice.repository.ConversationRepository;
 import com.microservices.chatservice.repository.ParticipantRepository;
 import com.microservices.chatservice.repository.UserRepository;
@@ -19,11 +20,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ParticipantServiceImpl extends AbstractParticipantService {
+public class ParticipantServiceImpl implements IParticipantService {
 
     private final UserRepository userRepository;
     private final ConversationRepository conversationRepository;
     private final ParticipantRepository participantRepository;
+
+    private final ParticipantMapper mapper;
 
     @Override
     public PagingObjectsResponse<ParticipantResponse> getAllParticipants(Long conversationId, Integer pageNumber, Integer pageSize) {
@@ -37,7 +40,7 @@ public class ParticipantServiceImpl extends AbstractParticipantService {
                 participants.getNumberOfElements(),
                 participants.isFirst(),
                 participants.isLast(),
-                participants.map(this::mapToResponse).toList()
+                participants.map(mapper::toResponse).toList()
         );
     }
 

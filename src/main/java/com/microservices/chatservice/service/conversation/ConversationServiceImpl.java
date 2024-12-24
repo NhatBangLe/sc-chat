@@ -9,6 +9,7 @@ import com.microservices.chatservice.entity.Conversation;
 import com.microservices.chatservice.entity.User;
 import com.microservices.chatservice.exception.IllegalAttributeException;
 import com.microservices.chatservice.exception.NoEntityFoundException;
+import com.microservices.chatservice.mapper.ConversationMapper;
 import com.microservices.chatservice.repository.ConversationRepository;
 import com.microservices.chatservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ConversationServiceImpl extends AbstractConversationService {
+public class ConversationServiceImpl implements IConversationService {
 
     private final UserRepository userRepository;
     private final ConversationRepository conversationRepository;
+
+    private final ConversationMapper mapper;
 
     @Override
     public PagingObjectsResponse<ConversationResponse> getAllConversations(String userId, Integer pageNumber, Integer pageSize) {
@@ -35,14 +38,14 @@ public class ConversationServiceImpl extends AbstractConversationService {
                 conversations.getNumberOfElements(),
                 conversations.isFirst(),
                 conversations.isLast(),
-                conversations.map(this::mapToResponse).toList()
+                conversations.map(mapper::toResponse).toList()
         );
     }
 
     @Override
     public ConversationResponse getConversation(Long conversationId) throws NoEntityFoundException {
         var conversation = findConversation(conversationId);
-        return mapToResponse(conversation);
+        return mapper.toResponse(conversation);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.microservices.chatservice.service.attachment;
 import com.microservices.chatservice.dto.response.AttachmentResponse;
 import com.microservices.chatservice.dto.response.PagingObjectsResponse;
 import com.microservices.chatservice.exception.NoEntityFoundException;
+import com.microservices.chatservice.mapper.AttachmentMapper;
 import com.microservices.chatservice.repository.AttachmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AttachmentServiceImpl extends AbstractAttachmentService {
+public class AttachmentServiceImpl implements IAttachmentService {
 
     private final AttachmentRepository attachmentRepository;
+
+    private final AttachmentMapper mapper;
 
     @Override
     public PagingObjectsResponse<AttachmentResponse> getAllAttachments(Long conversationId, Integer pageNumber, Integer pageSize)
@@ -28,7 +31,7 @@ public class AttachmentServiceImpl extends AbstractAttachmentService {
                 attachments.getNumberOfElements(),
                 attachments.isFirst(),
                 attachments.isLast(),
-                attachments.map(this::mapToResponse).toList()
+                attachments.map(mapper::toResponse).toList()
         );
     }
 
