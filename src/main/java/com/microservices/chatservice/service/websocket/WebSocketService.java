@@ -39,12 +39,13 @@ public class WebSocketService {
         var senderId = chatSendingMessage.senderId();
         var text = chatSendingMessage.text();
         var attachmentIds = chatSendingMessage.attachmentIds();
-        if (!participantRepository.existsByConversation_IdAndUser_Id(conversationId, senderId))
-            throw new WebSocketException("Participant not found.");
-
         var conversation = findConversation(conversationId);
-        var sender = findUser(senderId);
 
+        if (!conversation.getCreator().getId().equals(senderId) &&
+            !participantRepository.existsByConversation_IdAndUser_Id(conversationId, senderId))
+            throw new WebSocketException("User cannot send messages in the conversation with id " + conversationId);
+
+        var sender = findUser(senderId);
         var newMessage = Message.builder()
                 .type(MessageType.TEXT)
                 .text(text)
@@ -102,8 +103,7 @@ public class WebSocketService {
             user = userRepository.findById(userId)
                     .orElse(User.builder().id(userId).build());
             user.setStatus(UserStatus.ONLINE);
-        }
-        else {
+        } else {
             user = findUser(userId);
             user.setStatus(UserStatus.OFFLINE);
         }
