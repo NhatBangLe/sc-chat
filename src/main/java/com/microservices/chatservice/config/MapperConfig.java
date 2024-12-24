@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class MapperConfig {
 
     @Bean
-    public ConversationMapper conversationMapper() {
-        return new ConversationMapper();
+    public ConversationMapper conversationMapper(MessageMapper messageMapper) {
+        return new ConversationMapper(messageMapper);
     }
 
     @Bean

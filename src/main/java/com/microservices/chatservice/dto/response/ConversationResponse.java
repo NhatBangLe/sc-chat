@@ -9,8 +9,10 @@ import java.io.Serializable;
  */
 public record ConversationResponse(
         Long id,
+        Boolean isRead,
         String title,
         Long messageCount,
+        MessageResponse lastMessage,
         Integer participantCount,
         Long createdAt,
         Long updatedAt,

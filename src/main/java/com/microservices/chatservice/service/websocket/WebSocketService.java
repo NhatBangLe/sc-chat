@@ -7,6 +7,7 @@ import com.microservices.chatservice.dto.response.MessageResponse;
 import com.microservices.chatservice.dto.response.NotificationResponse;
 import com.microservices.chatservice.entity.*;
 import com.microservices.chatservice.exception.WebSocketException;
+import com.microservices.chatservice.mapper.MessageMapper;
 import com.microservices.chatservice.repository.ParticipantRepository;
 import com.microservices.chatservice.repository.UserRepository;
 import com.microservices.chatservice.dto.request.ChatSendingMessage;
@@ -30,6 +31,8 @@ public class WebSocketService {
     private final ConversationRepository conversationRepository;
     private final ParticipantRepository participantRepository;
     private final MessageRepository messageRepository;
+
+    private final MessageMapper mapper;
 
     public MessageResponse transferMessage(Long conversationId, ChatSendingMessage chatSendingMessage)
             throws NoEntityFoundException {
@@ -60,7 +63,7 @@ public class WebSocketService {
             newMessage.setAttachments(attachments);
             newMessage.setType(text != null ? MessageType.BOTH : MessageType.FILE);
         }
-        messageRepository.save(newMessage);
+        var newMessageSaved = messageRepository.save(newMessage);
 
         // Notify to all participants of the conversation
         var userIds = conversation.getParticipants().stream()
@@ -71,17 +74,10 @@ public class WebSocketService {
 
         // Update message size for conversation
         conversation.setMessageCount(conversation.getMessageCount() + 1);
+        conversation.setLastMessage(newMessage);
         conversationRepository.save(conversation);
 
-        return new MessageResponse(
-                newMessage.getId(),
-                newMessage.getType(),
-                text,
-                attachmentIds,
-                newMessage.getCreatedAt().getTime(),
-                senderId,
-                conversationId
-        );
+        return mapper.toResponse(newMessageSaved);
     }
 
     /**
