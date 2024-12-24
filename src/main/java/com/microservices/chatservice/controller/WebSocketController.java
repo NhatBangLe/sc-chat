@@ -44,7 +44,7 @@ public class WebSocketController {
 
     @MessageMapping("/user/{userId}")
     public void handleUserConnection(@DestinationVariable String userId,
-                                @Payload boolean isConnected) {
+                                @Payload Boolean isConnected) {
         webSocketService.handleUserConnection(userId, isConnected);
     }
 
