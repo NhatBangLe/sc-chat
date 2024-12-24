@@ -43,6 +43,7 @@ public class Conversation extends AuditingEntity {
     private User creator;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "last_message_id", referencedColumnName = "id")
     private Message lastMessage;
 
     @OneToMany(mappedBy = "conversation", orphanRemoval = true, cascade = CascadeType.REMOVE)
