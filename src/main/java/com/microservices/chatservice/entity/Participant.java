@@ -21,11 +21,11 @@ public class Participant extends AuditingEntity {
     @Column(nullable = false)
     private ParticipantType type;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "conversation_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Conversation conversation;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id", nullable = false, updatable = false, referencedColumnName = "id")
     private User user;
 }

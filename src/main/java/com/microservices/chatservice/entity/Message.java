@@ -29,11 +29,11 @@ public class Message extends AuditingEntity {
     @OneToMany(mappedBy = "message", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Attachment> attachments;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false, updatable = false, referencedColumnName = "id")
     private User sender;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "conversation_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Conversation conversation;
 }

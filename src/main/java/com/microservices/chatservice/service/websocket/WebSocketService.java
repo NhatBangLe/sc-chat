@@ -14,6 +14,7 @@ import com.microservices.chatservice.dto.request.ChatSendingMessage;
 import com.microservices.chatservice.exception.NoEntityFoundException;
 import com.microservices.chatservice.repository.ConversationRepository;
 import com.microservices.chatservice.repository.MessageRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -34,11 +35,13 @@ public class WebSocketService {
 
     private final MessageMapper mapper;
 
+    @Transactional
     public MessageResponse transferMessage(Long conversationId, ChatSendingMessage chatSendingMessage)
             throws NoEntityFoundException {
         var senderId = chatSendingMessage.senderId();
         var text = chatSendingMessage.text();
         var attachmentIds = chatSendingMessage.attachmentIds();
+
         var conversation = findConversation(conversationId);
 
         if (!conversation.getCreator().getId().equals(senderId) &&
@@ -67,15 +70,15 @@ public class WebSocketService {
         var newMessageSaved = messageRepository.save(newMessage);
 
         // Notify to all participants of the conversation
+        // Persist a transaction for this code block. Because Participant is lazy loading.
         var userIds = conversation.getParticipants().stream()
-                .map(Participant::getUser)
-                .map(User::getId)
+                .map(participant -> participant.getUser().getId())
                 .toList();
         notifyToUser(userIds, new NotificationResponse(conversationId));
 
         // Update message size for conversation
         conversation.setMessageCount(conversation.getMessageCount() + 1);
-        conversation.setLastMessage(newMessage);
+        conversation.setLastMessage(newMessageSaved);
         conversationRepository.save(conversation);
 
         return mapper.toResponse(newMessageSaved);

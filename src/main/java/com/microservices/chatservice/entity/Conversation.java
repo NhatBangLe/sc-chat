@@ -20,8 +20,8 @@ public class Conversation extends AuditingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     @Builder.Default
+    @Column(nullable = false)
     private Boolean isRead = false;
 
     @Column(length = 100)
@@ -30,26 +30,26 @@ public class Conversation extends AuditingEntity {
     @Column(nullable = false)
     private ConversationType type;
 
-    @Column(nullable = false)
     @Builder.Default
+    @Column(nullable = false)
     private Long messageCount = 0L;
 
-    @Column(nullable = false)
     @Builder.Default
+    @Column(nullable = false)
     private Integer participantCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "creator_id", nullable = false, updatable = false, referencedColumnName = "id")
     private User creator;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "last_message_id", referencedColumnName = "id")
     private Message lastMessage;
 
     @OneToMany(mappedBy = "conversation", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Message> messages;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "conversation")
+    @OneToMany(mappedBy = "conversation", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<Participant> participants;
 
     @OneToMany(mappedBy = "conversation", orphanRemoval = true, cascade = CascadeType.REMOVE)

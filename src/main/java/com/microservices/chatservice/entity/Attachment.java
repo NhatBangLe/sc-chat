@@ -17,11 +17,11 @@ public class Attachment extends AuditingEntity {
     @Column(length = 36)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "message_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Message message;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "conversation_id", nullable = false, updatable = false, referencedColumnName = "id")
     private Conversation conversation;
 }
