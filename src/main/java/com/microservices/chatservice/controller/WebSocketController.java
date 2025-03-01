@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(path = "/api/${API_VERSION}/chat")
+@RequestMapping(path = "/api/v1/chat")
 @Tag(name = "WebSocket")
 public class WebSocketController {
 

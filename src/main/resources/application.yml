@@ -18,25 +18,9 @@ springdoc:
   api-docs:
     path: /api-docs
 
-eureka:
-  instance:
-    appname: ${EUREKA_APP_NAME:unknown}
-    ip-address: ${EUREKA_IP_ADDR:127.0.0.1}
-    non-secure-port: ${EUREKA_PORT:8080}
-    metadataMap:
-      zone: ${REGISTER_ZONE:}
-    prefer-ip-address: true
-    statusPageUrl: http://${eureka.instance.ip-address}:${eureka.instance.non-secure-port}/info
-    healthCheckUrl: http://${eureka.instance.ip-address}:${eureka.instance.non-secure-port}/health
-    homePageUrl: http://${eureka.instance.ip-address}:${eureka.instance.non-secure-port}/
-  client:
-    service-url:
-      defaultZone: ${DEFAULT_ZONE:http://admin:admin@localhost:8080/eureka/}
-    preferSameZoneEureka: true
-
 chat:
   server-host: ${EXTERNAL_HOST:localhost}
   server-port: ${EXTERNAL_PORT:8080}
 
-API_VERSION: v1
-API_DOCS_SERVER: ${SWAGGER_SERVER_URL:http://localhost:8080}
+app:
+  api-docs-server: ${SWAGGER_SERVER_URL:http://localhost:8080}

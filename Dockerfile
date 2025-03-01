@@ -1,6 +1,7 @@
 FROM eclipse-temurin:21-jdk-jammy AS build
 COPY . /app
 WORKDIR /app
+RUN chmod +x ./mvnw
 RUN ./mvnw clean install -Dmaven.test.skip=true
 
 FROM eclipse-temurin:21-jre-jammy

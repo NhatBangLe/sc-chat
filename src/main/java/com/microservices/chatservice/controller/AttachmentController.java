@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/${API_VERSION}/chat/attachment")
+@RequestMapping(path = "/api/v1/chat/attachment")
 @Tag(
         name = "Attachment Controller",
         description = "All endpoints about attachmentIds belongs a conversation of an user."

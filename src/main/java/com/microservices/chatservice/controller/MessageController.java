@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/${API_VERSION}/chat/message")
+@RequestMapping(path = "/api/v1/chat/message")
 @Tag(
         name = "Message Controller",
         description = "All endpoints about messages of a conversation belongs an user."
